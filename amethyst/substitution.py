@@ -2,9 +2,9 @@ import itertools
 from typing import List, Optional, Union
 
 from loguru import logger
-from rdkit.Chem.AllChem import MolFromSmiles, MolToSmiles, ReplaceSubstructs
 from rdkit.Chem.rdchem import Mol
-from rdkit.Chem.rdmolops import SanitizeMol, molzipFragments
+from rdkit.Chem.rdmolops import SanitizeMol, molzipFragments, ReplaceSubstructs
+from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles 
 from rdkit.Chem.rdRGroupDecomposition import RelabelMappedDummies, RGroupLabelling
 
 from amethyst.io import Substituents

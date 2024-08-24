@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from typing import List, Optional, Union
 
 from loguru import logger
-from rdkit.Chem.AllChem import Mol, MolFromSmiles, MolToSmiles
+from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles
+from rdkit.Chem.rdchem import Mol
 
 from amethyst.utils import mols_to_str
 
@@ -60,7 +61,10 @@ def parse_file_input(
             r_num = int(m.group(0))
         else:
             raise ValueError("R# is missing.")
-
+    elif r_num is None and multiple_rs:
+        r_num = 1
+    else:
+        raise ValueError("Neither ")
     logger.debug(f"File given for R{r_num}.")
 
     subs_list: List[Mol] = []
