@@ -5,9 +5,9 @@ import click
 
 from amethyst.amethyst import enumerate
 
+CTX_SETTINGS = dict(help_option_names=['-h', '--help'])
 
-
-@click.group()
+@click.group(context_settings=CTX_SETTINGS)
 def main():
     pass
 
@@ -30,7 +30,7 @@ def generate(
     debug: Optional[bool] = False
 ) -> None:
     """Generate combinations of provided CORE_SMI and R_FILE."""
-    
+
     if debug:
         logger.add("amethyst.log", level="DEBUG")
     else:
