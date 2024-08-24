@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from loguru import logger
 from rdkit.Chem.rdRGroupDecomposition import RelabelMappedDummies, RGroupLabelling
@@ -26,10 +26,10 @@ def enumerate(
     multiple_rs: bool = False,
     subs_path: Optional[str] = None,
     delimiter: Optional[str] = None,
-    subs_mol: Optional[List[List[Union[Mol, str]]]] = None,
+    subs_mol: Optional[list[list[Union[Mol, str]]]] = None,
     enantiomers: bool = False,
     output_smi: bool = False,
-) -> List[Union[Mol, str]]:
+) -> list[Union[Mol, str]]:
     """Enumerates scaffold molecule with provided R-groups. Can generate enantiomers.
 
     Args:
@@ -38,7 +38,7 @@ def enumerate(
         multiple_rs (bool): Flag determining if each line in a file should be considered different R-group. First line is R1 and so on. Defaults to False.
         subs_path (Optional[str], optional): Path to file with R-groups. Defaults to None.
         delimiter (Optional[str], optional): Delimiter used in provided file, can be any valid string. Defaults to newline.
-        subs_mol (Optional[List[List[Union[Mol, str]]]], optional): R-groups provided in form of RDKit molecules. Defaults to None.
+        subs_mol (Optional[list[list[Union[Mol, str]]]], optional): R-groups provided in form of RDKit molecules. Defaults to None.
         enantiomers (bool, optional):  Flag determining generation of enantiomers after the enumeration. Defaults to False
         output_smi (bool, optional): Flag if output should be in SMILES or Mol objects. Defaults to False.
 
@@ -46,7 +46,7 @@ def enumerate(
         ValueError: Raised either when both sources of molecules were given or none of them.
 
     Returns:
-        List[Mol]: List of enumerated molecules.
+        list[Mol]: list of enumerated molecules.
     """
     if subs_path is not None and subs_mol is not None:
         logger.error("Both sources for R-groups passed")
@@ -54,14 +54,14 @@ def enumerate(
     elif subs_path is not None:
         logger.debug("Filepath passed")
         if r_num is not None:
-            r_groups: List[Substituents] = parse_file_input(subs_path, r_num, delimiter)
+            r_groups: list[Substituents] = parse_file_input(subs_path, r_num, delimiter)
         elif multiple_rs:
-            r_groups: List[Substituents] = parse_file_input(subs_path, delimiter=delimiter, multiple_rs=True)
+            r_groups: list[Substituents] = parse_file_input(subs_path, delimiter=delimiter, multiple_rs=True)
         else:
             raise ValueError("Either pass r_num or set multiple_rs to True")
     elif subs_mol is not None:
         logger.debug("Mol list passed")
-        r_groups: List[Substituents] = parse_mol_input(subs_mol)
+        r_groups: list[Substituents] = parse_mol_input(subs_mol)
         [logger.debug(f"Parsed R-Groups: {mols_to_str(x.subs)}") for x in r_groups]
     else:
         logger.error("No R-groups were passed")
@@ -72,7 +72,7 @@ def enumerate(
     
     RelabelMappedDummies(core, outputLabels=RGroupLabelling.AtomMap)
 
-    analogues: List[Mol] = general_sub(core, r_groups)
+    analogues: list[Mol] = general_sub(core, r_groups)
 
     if enantiomers:
         params = StereoEnumerationOptions(tryEmbedding=True, unique=True)

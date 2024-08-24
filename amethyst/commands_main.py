@@ -49,7 +49,7 @@ def generate(
     
     logger.debug(f"Core: {core_smi}")
     logger.debug(f"R file: {r_file}")
-    logger.debug(f"Delimiter: {delimiter}") # FIXME - it works only with -d";" for ; delim????
+    logger.debug(f"Delimiter: {delimiter}")
     logger.debug(f"Enantiomers: {enantiomers}")
     logger.debug(f"Output file: {output_file}")
 

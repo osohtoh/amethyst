@@ -1,7 +1,7 @@
 import os
 import re
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from loguru import logger
 from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles
@@ -13,16 +13,16 @@ from amethyst.utils import mols_to_str
 
 @dataclass
 class Substituents:
-    """Dataclass used for storing a list of R-groups with their respective R#.
+    """Dataclass used for storing a listof R-groups with their respective R#.
 
     Attributes:
         r_num (int): R#
-        subs (List[Mol]): List of substituents in Mol object
+        subs (list[Mol]): listof substituents in Mol object
 
     """
 
     r_num: int
-    subs: List[Mol]
+    subs: list[Mol]
 
 
 # NOTE - refactor regexes maybe?
@@ -31,7 +31,7 @@ def parse_file_input(
     r_num: Optional[int] = None,
     delimiter: Optional[str] = None,
     multiple_rs: Optional[bool] = False,
-) -> List[Substituents]:
+) -> list[Substituents]:
     """Parses provided file to a Substituents dataclass. Accepts R-groups marked as either isotope labels or atom maps. Newline separated file can only be for one R#.
 
     Args:
@@ -67,10 +67,10 @@ def parse_file_input(
         raise ValueError("Neither ")
     logger.debug(f"File given for R{r_num}.")
 
-    subs_list: List[Mol] = []
+    subs_list: list[Mol] = []
     r = f"[*:{r_num}]"
 
-    subs: List[Substituents] = []
+    subs: list[Substituents] = []
 
     with open(filepath, "r") as file:
         if delimiter is None:
@@ -80,14 +80,14 @@ def parse_file_input(
                 logger.debug(f"SMILES added: {m}")
             subs.append(Substituents(r_num, subs_list))
         else:
-            lines: List[str] = file.readlines()
+            lines: list[str] = file.readlines()
             logger.debug(lines)
             if multiple_rs:
                 # TODO - Write tests
                 for line in lines:
                     r = f"[*:{r_num}]"
                     m = re.sub(r"\[[0-9]\*\]|\[.\:[0-9]\]", r, line)
-                    split_lines: List[str] = m.split(delimiter)
+                    split_lines: list[str] = m.split(delimiter)
                     subs.append(
                         Substituents(r_num, [MolFromSmiles(x) for x in split_lines])
                     )
@@ -96,7 +96,7 @@ def parse_file_input(
             else:
                 for line in lines:
                     m = re.sub(r"\[[0-9]\*\]|\[.\:[0-9]\]", r, line)
-                    split_lines: List[str] = m.split(delimiter)
+                    split_lines: list[str] = m.split(delimiter)
                     subs.append(
                         Substituents(r_num, [MolFromSmiles(x) for x in split_lines])
                     )
@@ -107,20 +107,20 @@ def parse_file_input(
     return subs
 
 
-def parse_mol_input(mols: List[List[Union[Mol, str]]]) -> List[Substituents]:
-    """Parses list of molecules to a Substituents class. R# is handled via the list index (n+1) e.g., first list of Mol's in the list passed will have R1 number and so on.
+def parse_mol_input(mols: list[list[Union[Mol, str]]]) -> list[Substituents]:
+    """Parses listof molecules to a Substituents class. R# is handled via the listindex (n+1) e.g., first listof Mol's in the listpassed will have R1 number and so on.
 
     Args:
-        mols (List[List[Mol]]): List containing another list of R-groups.
+        mols (list[list[Mol]]): listcontaining another listof R-groups.
 
     Raises:
         ValueError: Raised when input isn't Mol or str.
 
     Returns:
-        List[Substituents]: Returns subs parsed into a list of Substituents dataclass.
+        list[Substituents]: Returns subs parsed into a listof Substituents dataclass.
     """
     r_num = 1
-    substituents_list = []
+    substituents_list= []
     for i in mols:
         if type(i[0]) is Mol:
             logger.debug("Mol input detected.")
