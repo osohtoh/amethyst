@@ -1,7 +1,7 @@
 from typing import List
 
 import pytest
-from rdkit.Chem.AllChem import CanonSmiles, Mol, MolFromSmiles, MolToInchi, MolToSmiles
+from rdkit.Chem.AllChem import CanonSmiles, Mol, MolFromSmiles, MolToSmiles
 
 from amethyst.substitution import placeholder_atom_sub
 

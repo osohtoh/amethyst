@@ -12,7 +12,7 @@ def mol_or_atom(smiles: str) -> Union[Mol, Atom]:
     try:
         a = Atom(smiles)
         return a
-    except Exception as e:
+    except Exception:
         return MolFromSmiles(smiles)
 
 

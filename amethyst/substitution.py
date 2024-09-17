@@ -48,11 +48,6 @@ def placeholder_atom_sub(
     return mols
 
 
-# Checks:
-# - actually use molzip with relabelMappedDummies
-# - insertion of Mol's at right indices
-# - if it works with rdRGroupDecomposition output
-# -- https://www.rdkit.org/docs/source/rdkit.Chem.rdRGroupDecomposition.html#rdkit.Chem.rdRGroupDecomposition.RGroupDecompositionParameters
 def general_sub(
     core_mol: Mol, subs: list[Substituents], relabelled: Optional[bool] = True
 ) -> list[Mol]:

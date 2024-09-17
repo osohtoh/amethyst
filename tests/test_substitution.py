@@ -2,7 +2,7 @@ import pytest
 from rdkit.Chem.AllChem import CanonSmiles, MolFromSmiles, MolToSmiles
 
 from amethyst.io import parse_mol_input
-from amethyst.substitution import general_sub, placeholder_atom_sub
+from amethyst.substitution import general_sub
 
 core = MolFromSmiles("[*:2]Cc1cccc([*:1])c1")
 r = [["[*:1]NC", "[*:1]NCc1ccccc1"], ["[*:2]c1ccccc1", "[*:2]OC"]]
