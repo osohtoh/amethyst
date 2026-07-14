@@ -4,14 +4,13 @@ from typing import Optional, Union
 from loguru import logger
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolops import SanitizeMol, molzipFragments, ReplaceSubstructs
-from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles 
+from rdkit.Chem.rdmolfiles import MolFromSmiles, MolFromSmarts, MolToSmiles
 from rdkit.Chem.rdRGroupDecomposition import RelabelMappedDummies, RGroupLabelling
 
 from amethyst.io import Substituents
 from amethyst.utils import mols_to_str
 
 
-# REVIEW - Do I need this. Can just use RelabelMappedDummies to change them into atom maps.
 def placeholder_atom_sub(
     core_mol: Mol,
     placeholder_atom: str,
@@ -19,16 +18,20 @@ def placeholder_atom_sub(
     inner: bool = False,
 ) -> list[Mol]:
     mols = []
-    core_dummy_idx = core_mol.GetSubstructMatch(MolFromSmiles(placeholder_atom))
+    placeholder_mol = MolFromSmiles(placeholder_atom)
+    placeholder_atomic_num = placeholder_mol.GetAtoms()[0].GetAtomicNum()
+    placeholder_query = MolFromSmarts(f"[#{placeholder_atomic_num}]")
+    core_dummy_idx = core_mol.GetSubstructMatch(placeholder_query)
+    connection_point = 0 if not inner else core_dummy_idx[0]
 
     if type(r_groups[0]) == Mol:
         for i in r_groups:
             mod_mol = ReplaceSubstructs(
                 core_mol,
-                MolFromSmiles(placeholder_atom),
+                placeholder_query,
                 i,
                 replaceAll=True,
-                replacementConnectionPoint=(0 if not inner else core_dummy_idx),
+                replacementConnectionPoint=connection_point,
             )
             logger.debug(f"Generated SMILES: {MolToSmiles(mod_mol[0])}")
             SanitizeMol(mod_mol[0])
@@ -37,10 +40,10 @@ def placeholder_atom_sub(
         for i in r_groups:
             mod_mol = ReplaceSubstructs(
                 core_mol,
-                MolFromSmiles(placeholder_atom),
+                placeholder_query,
                 MolFromSmiles(i),
                 replaceAll=True,
-                replacementConnectionPoint=(0 if not inner else core_dummy_idx),
+                replacementConnectionPoint=connection_point,
             )
             logger.debug(f"Generated SMILES: {MolToSmiles(mod_mol[0])}")
             SanitizeMol(mod_mol[0])

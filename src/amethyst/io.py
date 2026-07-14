@@ -10,7 +10,6 @@ from rdkit.Chem.rdchem import Mol
 from amethyst.utils import mols_to_str
 
 
-
 @dataclass
 class Substituents:
     """Dataclass used for storing a listof R-groups with their respective R#.
@@ -54,17 +53,16 @@ def parse_file_input(
         logger.error(f"{filepath} is not a file!")
         raise FileNotFoundError(f"{filepath} is not a file!")
 
-    if r_num is None and not multiple_rs:
-        path_split = re.split(r"(\\\\)|(/)|(\\)", filepath)
-        m = re.match("[rR][0-9]+", path_split[-1])
-        if m is not None:
-            r_num = int(m.group(0))
+    if r_num is None:
+        if multiple_rs:
+            r_num = 1
         else:
-            raise ValueError("R# is missing.")
-    elif r_num is None and multiple_rs:
-        r_num = 1
-    else:
-        raise ValueError("Neither ")
+            path_split = re.split(r"(\\\\)|(/)|(\\)", filepath)
+            m = re.match("[rR][0-9]+", path_split[-1])
+            if m is not None:
+                r_num = int(m.group(0))
+            else:
+                raise ValueError("R# is missing.")
     logger.debug(f"File given for R{r_num}.")
 
     subs_list: list[Mol] = []
@@ -120,7 +118,7 @@ def parse_mol_input(mols: list[list[Union[Mol, str]]]) -> list[Substituents]:
         list[Substituents]: Returns subs parsed into a listof Substituents dataclass.
     """
     r_num = 1
-    substituents_list= []
+    substituents_list = []
     for i in mols:
         if type(i[0]) is Mol:
             logger.debug("Mol input detected.")
