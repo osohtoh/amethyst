@@ -1,15 +1,10 @@
 
-[tool.uv]
+[dependency-groups]
 dev = [
     "black<25.0.0,>=24.4.2",
     "ruff<1.0.0,>=0.4.4",
     "autopep8<3.0.0,>=2.1.0",
     "pytest<9.0.0,>=8.2.0",
-]
-
-[tool.uv.build]
-includes = [
-    "amethyst",
 ]
 
 [build-system]
@@ -29,7 +24,6 @@ dependencies = [
     "rdkit>=2023.9.6",
     "click<9.0.0,>=8.1.7",
     "loguru<1.0.0,>=0.7.2",
-    "pytest>=8.4.1",
 ]
 name = "amethyst-rdkit"
 version = "1.1"

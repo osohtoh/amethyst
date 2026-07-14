@@ -36,8 +36,8 @@ def main():
 @click.option(
     "-o",
     "--output-file",
-    type=click.File(mode="x"),
-    help="File output path. Provided filepath must be empty.",
+    type=str,
+    help="File output path. Defaults to output.txt.",
 )
 @click.option(
     "--debug",

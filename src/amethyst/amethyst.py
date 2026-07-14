@@ -71,14 +71,21 @@ def enumerate(
 
     if type(core) is not Mol:
         core = MolFromSmiles(core)
+    if core is None:
+        raise ValueError(f"Could not parse core SMILES: {core!r}")
 
+    core = MolFromSmiles(MolToSmiles(core))
     RelabelMappedDummies(core, outputLabels=RGroupLabelling.AtomMap)
 
     analogues: list[Mol] = general_sub(core, r_groups)
 
     if enantiomers:
         params = StereoEnumerationOptions(tryEmbedding=True, unique=True)
-        stereoisomers = [EnumerateStereoisomers(x, options=params) for x in analogues]
+        stereoisomers = [
+            mol
+            for analogue in analogues
+            for mol in EnumerateStereoisomers(analogue, options=params)
+        ]
         if output_smi:
             return [MolToSmiles(x) for x in stereoisomers]
         else:

@@ -17,11 +17,20 @@ def placeholder_atom_sub(
     r_groups: Union[list[str], list[Mol]],
     inner: bool = False,
 ) -> list[Mol]:
+    if not r_groups:
+        raise ValueError("No R-groups provided for placeholder substitution")
+
     mols = []
     placeholder_mol = MolFromSmiles(placeholder_atom)
+    if placeholder_mol is None or placeholder_mol.GetNumAtoms() != 1:
+        raise ValueError(f"Invalid placeholder atom: {placeholder_atom}")
     placeholder_atomic_num = placeholder_mol.GetAtoms()[0].GetAtomicNum()
     placeholder_query = MolFromSmarts(f"[#{placeholder_atomic_num}]")
     core_dummy_idx = core_mol.GetSubstructMatch(placeholder_query)
+    if not core_dummy_idx:
+        raise ValueError(
+            f"Placeholder atom {placeholder_atom} not found in core molecule"
+        )
     connection_point = 0 if not inner else core_dummy_idx[0]
 
     if type(r_groups[0]) == Mol:
