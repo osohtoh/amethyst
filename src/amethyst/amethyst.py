@@ -3,7 +3,7 @@ from typing import Optional, Union
 from loguru import logger
 from rdkit.Chem.rdRGroupDecomposition import RelabelMappedDummies, RGroupLabelling
 from rdkit.Chem.rdchem import Mol
-from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles 
+from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles
 from rdkit.Chem.EnumerateStereoisomers import (
     EnumerateStereoisomers,
     StereoEnumerationOptions,
@@ -56,7 +56,9 @@ def enumerate(
         if r_num is not None:
             r_groups: list[Substituents] = parse_file_input(subs_path, r_num, delimiter)
         elif multiple_rs:
-            r_groups: list[Substituents] = parse_file_input(subs_path, delimiter=delimiter, multiple_rs=True)
+            r_groups: list[Substituents] = parse_file_input(
+                subs_path, delimiter=delimiter, multiple_rs=True
+            )
         else:
             raise ValueError("Either pass r_num or set multiple_rs to True")
     elif subs_mol is not None:
@@ -69,7 +71,7 @@ def enumerate(
 
     if type(core) is not Mol:
         core = MolFromSmiles(core)
-    
+
     RelabelMappedDummies(core, outputLabels=RGroupLabelling.AtomMap)
 
     analogues: list[Mol] = general_sub(core, r_groups)
