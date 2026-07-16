@@ -1,6 +1,5 @@
 from typing import Optional, Union
 
-from loguru import logger
 from rdkit.Chem.rdRGroupDecomposition import RelabelMappedDummies, RGroupLabelling
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles
@@ -14,10 +13,9 @@ from amethyst.io import (
     parse_file_input,
     parse_mol_input,
 )
+from amethyst.logger import logger
 from amethyst.substitution import general_sub
 from amethyst.utils import mols_to_str
-
-logger.add("amethyst.log", level=10)
 
 
 def enumerate(

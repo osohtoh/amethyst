@@ -1,9 +1,9 @@
 from typing import Optional
-from loguru import logger
 
 import click
 
 from amethyst.amethyst import enumerate
+from amethyst.logger import logger
 
 CTX_SETTINGS = dict(help_option_names=["-h", "--help"])
 
@@ -56,9 +56,9 @@ def generate(
     """Generate combinations of provided CORE_SMI and R_FILE."""
 
     if debug:
-        logger.add("amethyst.log", level="DEBUG")
+        logger.setLevel("DEBUG")
     else:
-        logger.add("amethyst.log")
+        logger.setLevel("ERROR")
     if output_file is None:
         output_file = "output.txt"
 

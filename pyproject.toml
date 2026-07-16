@@ -23,7 +23,6 @@ requires-python = ">=3.9"
 dependencies = [
     "rdkit>=2023.9.6",
     "click<9.0.0,>=8.1.7",
-    "loguru<1.0.0,>=0.7.2",
 ]
 name = "amethyst-rdkit"
 version = "1.1"

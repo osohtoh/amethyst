@@ -1,13 +1,13 @@
 import itertools
 from typing import Optional, Union
 
-from loguru import logger
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolops import SanitizeMol, molzipFragments, ReplaceSubstructs
 from rdkit.Chem.rdmolfiles import MolFromSmiles, MolFromSmarts, MolToSmiles
 from rdkit.Chem.rdRGroupDecomposition import RelabelMappedDummies, RGroupLabelling
 
 from amethyst.io import Substituents
+from amethyst.logger import logger
 from amethyst.utils import mols_to_str
 
 

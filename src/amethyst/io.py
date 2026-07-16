@@ -3,10 +3,10 @@ import re
 from dataclasses import dataclass
 from typing import Optional, Union
 
-from loguru import logger
 from rdkit.Chem.rdmolfiles import MolFromSmiles, MolToSmiles
 from rdkit.Chem.rdchem import Mol
 
+from amethyst.logger import logger
 from amethyst.utils import mols_to_str
 
 
